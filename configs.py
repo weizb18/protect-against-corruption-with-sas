@@ -265,9 +265,9 @@ def get_datasets(dataset: str, augment_clf_train=False, add_indices_to_data=Fals
     
     if dataset == SupportedDatasets.CIFAR100.value:
         if add_indices_to_data:
-            dset = add_indices(CIFAR100)    #
+            dset = add_indices(CIFAR100)    # use modified CIFAR100 instead of torchvision.datasets.CIFAR100
         else:
-            dset = CIFAR100    #
+            dset = CIFAR100    # use modified CIFAR100 instead of torchvision.datasets.CIFAR100
             trainset = CIFAR100Augment(root=root, train=True, download=False, transform=transform_train, n_augmentations=num_positive)
         clftrainset = dset(root=root, train=True, download=False, transform=transform_clftrain)
         testset = dset(root=root, train=False, download=False, transform=transform_test)

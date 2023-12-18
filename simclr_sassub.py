@@ -37,19 +37,19 @@ def main(rank: int, world_size: int, args):
     if not args.distributed or rank == 0:
         if args.random_subset:
             wandb.init(
-                project="cifar100_"+str(args.subset_fraction),
+                project="cifar100gau_"+str(args.subset_fraction),
                 name="rand",
                 config=args
             )
         elif args.subset_indices != "":
             wandb.init(
-                project="cifar100_"+args.subset_indices.split('-')[1],
+                project="cifar100gau_"+args.subset_indices.split('-')[1],
                 name="sas",
                 config=args
             )
         else:
             wandb.init(
-                project="cifar100",
+                project="cifar100gau",
                 name="whole",
                 config=args
             )
@@ -129,7 +129,7 @@ def main(rank: int, world_size: int, args):
     )
 
     clftrainloader = torch.utils.data.DataLoader(
-        dataset = torchvision.datasets.CIFAR100(root='./data/cifar100-original', train=True, download=False, transform=transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5071, 0.4865, 0.4409), (0.2009, 0.1984, 0.2023))])),    #
+        dataset=datasets.clftrainset,
         batch_size=args.batch_size, 
         shuffle=False, 
         num_workers=4, 
@@ -224,7 +224,7 @@ def ddp_setup(rank: int, world_size: int, port: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='PyTorch Contrastive Learning.')
     parser.add_argument('--temperature', type=float, default=0.5, help='InfoNCE temperature')
-    parser.add_argument("--batch-size", type=int, default=512, help='Training batch size')
+    parser.add_argument("--batch-size", type=int, default=256, help='Training batch size')
     parser.add_argument("--lr", type=float, default=1e-3, help='learning rate')
     parser.add_argument("--num-epochs", type=int, default=400, help='Number of training epochs')
     parser.add_argument("--arch", type=str, default='resnet18', help='Encoder architecture',
